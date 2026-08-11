@@ -313,7 +313,7 @@ body{
 
 <!-- 플로팅 예보 바: 히어로가 화면 밖일 때만 표시, 누르면 예보로 복귀 -->
 <button class="floatbar" id="floatbar" type="button" aria-hidden="true" tabindex="-1"
-        title="예보 요약 — 누르면 상단 예보로 이동">
+        title="현재 시간 기준 위험도 — 누르면 상단 예보로 이동">
   <span class="fsig" id="fbSig"><span class="i" id="fbIcon">!</span><span class="l" id="fbLabel">주의</span></span>
   <span class="ftxt">
     <span class="fwhen" id="fbWhen"></span>
@@ -361,14 +361,6 @@ body{
       `가장 위험한 시간대는 <b>${M.hrange(peak.hour)}</b>`;
     document.getElementById('heroDesc').textContent =
       `${peak.level.desc} · 위험지수 ${peak.score}점 (100점 만점, ${M.riskMaxLabel}가 100점)`;
-
-    // ---- 플로팅 바 동기화 ----
-    document.getElementById('fbSig').style.background = col(peak.level);
-    document.getElementById('fbIcon').textContent = peak.level.icon;
-    document.getElementById('fbLabel').textContent = peak.level.label;
-    document.getElementById('fbWhen').textContent = when + ' 예보';
-    document.getElementById('fbMain').textContent = `가장 위험한 시간대는 ${M.hrange(peak.hour)}`;
-    document.getElementById('fbScore').textContent = peak.score;
 
     const b = rec.bestDay, wst = rec.worst[0];
     document.getElementById('mBest').textContent = M.hhmm(b.hour);
@@ -461,6 +453,83 @@ body{
   });
 
   render();
+
+  // ---- 플로팅 바: 현재 시각 기준 자동 위험도 (필터와 무관, 1분마다 갱신) ----
+  (function(){
+    const $ = id => document.getElementById(id);
+    const GRAY = 'var(--muted)';
+    const two = n => String(n).padStart(2, '0');
+    const at = (m, w, h) => M.dayProfile(m, w).find(p => p.hour === h);
+
+    const set = (bg, icon, label, when, main, score) => {
+      $('fbSig').style.background = bg;
+      $('fbIcon').textContent = icon;
+      $('fbLabel').textContent = label;
+      $('fbWhen').textContent = when;
+      $('fbMain').textContent = main;
+      $('fbScore').textContent = score;
+    };
+
+    function update(now){
+      now = now || new Date();
+      const t = `${two(now.getHours())}:${two(now.getMinutes())}`;
+      const m = now.getMonth() + 1;
+      const w = (now.getDay() + 6) % 7;          // 0=월 … 6=일
+      const h = now.getHours();
+      const dowKo = M.DOW_KO[w] + '요일';
+
+      // 시즌 오프(4–11월): 현재 위험도가 존재하지 않음을 명시하고 참고 예보만 제공
+      if (!M.MONTHS.includes(m)) {
+        const pk = M.dayProfile(12, w).reduce((a, b) => b.score > a.score ? b : a);
+        set(GRAY, '❄', '시즌오프',
+          `지금 ${t} · 스키장 운영 시즌(12–3월)이 아닙니다`,
+          `참고: 12월 ${dowKo} 최위험 ${M.hhmm(pk.hour)} (지수 ${pk.score})`,
+          '—');
+        return;
+      }
+      // 개장 전 (…~09시)
+      if (h < 9) {
+        const p9 = at(m, w, 9);
+        set(GRAY, '—', '개장 전',
+          `지금 ${t} · ${m}월 ${dowKo}`,
+          `09시 개장 · 첫 시간대 예보는 ${p9.level.icon} ${p9.level.label} (지수 ${p9.score})`,
+          '—');
+        return;
+      }
+      // 운영 종료 (23시~) → 다음 날 09시 예보
+      if (h > 22) {
+        const tm = new Date(now); tm.setDate(tm.getDate() + 1);
+        const m2 = tm.getMonth() + 1, w2 = (tm.getDay() + 6) % 7;
+        if (M.MONTHS.includes(m2)) {
+          const p9 = at(m2, w2, 9);
+          set(GRAY, '—', '운영 종료',
+            `지금 ${t} · 오늘 운영이 끝났습니다`,
+            `내일(${M.DOW_KO[w2]}) 09시 예보는 ${p9.level.icon} ${p9.level.label} (지수 ${p9.score})`,
+            '—');
+        } else {
+          set(GRAY, '❄', '시즌오프', `지금 ${t}`, '스키장 운영 시즌(12–3월)이 아닙니다', '—');
+        }
+        return;
+      }
+      // 운영 중 — 17시는 주간→야간 전환 정비
+      const p = at(m, w, h);
+      if (p.session.key === 'break') {
+        set(GRAY, '—', '정비',
+          `지금 ${t} · ${m}월 ${dowKo}`,
+          '주간→야간 전환 정비 시간대입니다 (야간 개장 18시)',
+          '—');
+        return;
+      }
+      set(col(p.level), p.level.icon, p.level.label,
+        `지금 ${t} · ${m}월 ${dowKo}`,
+        `현재 ${M.hrange(p.hour)}는 ${p.level.label} 시간대입니다`,
+        p.score);
+    }
+
+    update();
+    setInterval(() => update(), 60 * 1000);
+    window.__fbUpdate = update;   // 데모·테스트용: 특정 시각을 주입해 상태 확인
+  })();
 
   // ---- 플로팅 바 표시 제어: 히어로가 화면 밖일 때만 ----
   (function(){
