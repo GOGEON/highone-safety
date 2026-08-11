@@ -134,15 +134,21 @@ body{
 .note b{ color:var(--ink); }
 .note .ic{ flex:none; font-size:14px; line-height:1.5; }
 
-/* ---------- 배치 테이블 ---------- */
+/* ---------- 배치 테이블 ----------
+   좁은 화면에서는 셀이 줄바꿈되며 깨지므로,
+   셀은 nowrap으로 고정하고 표 자체가 컨테이너 안에서 가로 스크롤되게 한다 */
+.staff-wrap{ overflow-x:auto; -webkit-overflow-scrolling:touch; }
 .staff{ width:100%; border-collapse:collapse; font-size:13px; }
-.staff th,.staff td{ padding:9px 8px; border-bottom:1px solid var(--hair); text-align:right; }
+.staff th,.staff td{
+  padding:9px 8px; border-bottom:1px solid var(--hair); text-align:right;
+  white-space:nowrap;
+}
 .staff th{ font-size:11.5px; color:var(--muted); font-weight:700; }
 .staff th:first-child,.staff td:first-child{ text-align:left; }
 .staff td.hh{ font-weight:700; font-variant-numeric:tabular-nums; }
 .badge{
   display:inline-flex; align-items:center; gap:4px; padding:2px 9px; border-radius:999px;
-  font-size:11.5px; font-weight:700; color:#fff;
+  font-size:11.5px; font-weight:700; color:#fff; white-space:nowrap;
 }
 .crew{ display:inline-flex; gap:3px; }
 .crew i{ width:7px; height:15px; border-radius:2px; background:var(--series); display:block; }
@@ -287,10 +293,12 @@ body{
       <h3 class="ch-title" id="staffTitle"></h3>
       <p class="ch-sub">선택한 조건에서 사고 절대건수가 많은 상위 5개 시간대입니다. 배치 등급은 위험지수 구간(안전/주의/위험)에 대응합니다.</p>
     </div>
-    <table class="staff">
-      <thead><tr><th>순위</th><th>시간대</th><th>사고건수</th><th>누적 비중</th><th>위험지수</th><th>배치 등급</th></tr></thead>
-      <tbody id="staffBody"></tbody>
-    </table>
+    <div class="staff-wrap">
+      <table class="staff">
+        <thead><tr><th>순위</th><th>시간대</th><th>사고건수</th><th>누적 비중</th><th>위험지수</th><th>배치 등급</th></tr></thead>
+        <tbody id="staffBody"></tbody>
+      </table>
+    </div>
   </section>
 
   <div class="sect"><h2>계절 기상 참고</h2><span>하이원리조트 2017–2019</span></div>
@@ -307,7 +315,6 @@ body{
 
   <div class="foot">
     <span>SDU COSS 공공데이터 활용 바이브코딩 · 팀 강원랜드가고싶조</span>
-    <a href="compare.html">검토했던 디자인 시안 4종 비교 →</a>
   </div>
 </div>
 
@@ -482,7 +489,7 @@ body{
       if (!M.MONTHS.includes(m)) {
         const pk = M.dayProfile(12, w).reduce((a, b) => b.score > a.score ? b : a);
         set(GRAY, '❄', '시즌오프',
-          `지금 ${t} · 스키장 운영 시즌(12–3월)이 아닙니다`,
+          `지금 ${t} · 운영은 12–3월`,
           `참고: 12월 ${dowKo} 최위험 ${M.hhmm(pk.hour)} (지수 ${pk.score})`,
           '—');
         return;
