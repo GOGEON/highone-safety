@@ -300,6 +300,38 @@ body{
   .floatbar .fscore{ display:none; }
 }
 
+/* ---------- 첫 접속 온보딩 팝업 ---------- */
+.ob-back{
+  position:fixed; inset:0; z-index:70; background:rgba(11,26,43,.55);
+  display:none; padding:18px;
+}
+.ob-back.open{ display:grid; place-items:center; }
+.ob{
+  position:relative; width:min(460px, 100%);
+  max-height:calc(100vh - 36px); max-height:calc(100dvh - 36px);
+  background:#eaf1f8; border-radius:20px; overflow:hidden;
+  box-shadow:0 24px 70px rgba(11,26,43,.45);
+  display:flex; flex-direction:column;
+}
+.ob-body{ overflow:auto; min-height:0; -webkit-overflow-scrolling:touch; }
+.ob-body img{ display:block; width:100%; height:auto; }
+.ob-x{
+  position:absolute; top:12px; right:12px; z-index:2;
+  width:34px; height:34px; border:none; border-radius:50%;
+  background:rgba(11,26,43,.55); color:#fff; font-size:15px; font-weight:700;
+  cursor:pointer; display:grid; place-items:center;
+}
+.ob-x:hover{ background:rgba(11,26,43,.75); }
+.ob-foot{
+  flex:none; padding:12px 14px; background:#fff; border-top:1px solid var(--line);
+}
+.ob-start{
+  display:block; width:100%; border:none; border-radius:12px; cursor:pointer;
+  background:var(--series); color:#fff; font:inherit; font-size:15px; font-weight:800;
+  padding:13px 10px; letter-spacing:-.01em;
+}
+.ob-start:active{ opacity:.88; }
+
 /* ---------- 사고 신고 버튼 + 패널 ----------
    플로팅 바가 보일 때는 .lifted 로 그 위에 얹힌다 */
 .sos{
@@ -503,6 +535,20 @@ body{
 
   <div class="foot">
     <span>SDU COSS 공공데이터 활용 바이브코딩 · 팀 강원랜드가고싶조</span>
+    <a href="#" id="obReopen">안내 다시 보기</a>
+  </div>
+</div>
+
+<!-- 첫 접속 온보딩 팝업 -->
+<div class="ob-back" id="obBack">
+  <div class="ob" role="dialog" aria-modal="true" aria-label="스키장 안전 안내">
+    <button class="ob-x" id="obX" type="button" aria-label="닫기">✕</button>
+    <div class="ob-body">
+      <img src="assets/onboarding.svg" alt="스키장 안전 안내 — 슬로프가 다시 붐비고 있어요. 지난 시즌 전국 스키장 이용객은 약 435만 명으로 코로나 이전 수준을 회복했습니다. 전국 스키장 이용객 수 추이 차트.">
+    </div>
+    <div class="ob-foot">
+      <button class="ob-start" id="obStart" type="button">시작하기</button>
+    </div>
   </div>
 </div>
 
@@ -914,6 +960,27 @@ body{
     update();
     setInterval(() => update(), 60 * 1000);
     window.__fbUpdate = update;   // 데모·테스트용: 특정 시각을 주입해 상태 확인
+  })();
+
+  // ---- 첫 접속 온보딩 팝업: 한 번 닫으면 다시 띄우지 않는다 ----
+  (function(){
+    const KEY = 'h1OnboardSeen';
+    const back = document.getElementById('obBack');
+    const open = () => back.classList.add('open');
+    const close = () => {
+      back.classList.remove('open');
+      try { localStorage.setItem(KEY, '1'); } catch (e) { /* 시크릿 모드 등 */ }
+    };
+    document.getElementById('obX').addEventListener('click', close);
+    document.getElementById('obStart').addEventListener('click', close);
+    back.addEventListener('click', e => { if (e.target === back) close(); });
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape' && back.classList.contains('open')) close();
+    });
+    document.getElementById('obReopen').addEventListener('click', e => { e.preventDefault(); open(); });
+    let seen = null;
+    try { seen = localStorage.getItem(KEY); } catch (e) {}
+    if (!seen) open();
   })();
 
   // ---- 사고 신고 버튼: 패널 토글 (바깥 클릭·Esc 로 닫힘) ----
