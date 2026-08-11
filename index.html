@@ -51,7 +51,12 @@ body{
   display:grid; place-items:center; font-size:16px;
 }
 .brand h1{ margin:0; font-size:16px; font-weight:800; }
-.brand .team{ margin-left:auto; font-size:11.5px; font-weight:600; opacity:.85; }
+.brand .team{
+  margin-left:auto; font:inherit; font-size:11.5px; font-weight:600; opacity:.85;
+  background:none; border:none; color:#fff; cursor:pointer; padding:4px 2px;
+  border-bottom:1px dotted rgba(255,255,255,.55); transition:.15s;
+}
+.brand .team:hover{ opacity:1; border-bottom-color:#fff; }
 .tagline{ margin:14px 0 0; font-size:25px; font-weight:800; letter-spacing:-.03em; line-height:1.3; }
 .tagline small{ display:block; font-size:13.5px; font-weight:500; opacity:.9; margin-top:7px; letter-spacing:0; }
 
@@ -313,6 +318,9 @@ body{
   box-shadow:0 24px 70px rgba(11,26,43,.45);
   display:flex; flex-direction:column;
 }
+@media (min-width:720px){
+  .ob{ width:min(644px, 100%); }   /* 데스크톱에서는 1.4배 */
+}
 .ob-body{ overflow:auto; min-height:0; -webkit-overflow-scrolling:touch; }
 .ob-body img{ display:block; width:100%; height:auto; }
 .ob-x{
@@ -403,7 +411,8 @@ body{
     <div class="brand">
       <span class="mark" aria-hidden="true">❄</span>
       <h1>하이원 스키 예보</h1>
-      <span class="team">강원랜드가고싶조</span>
+      <button class="team" id="obOpen" type="button"
+              title="프로젝트 소개 보기" aria-haspopup="dialog">강원랜드가고싶조</button>
     </div>
     <p class="tagline">
       오늘, 언제 타는 게 가장 안전할까요?
@@ -535,7 +544,6 @@ body{
 
   <div class="foot">
     <span>SDU COSS 공공데이터 활용 바이브코딩 · 팀 강원랜드가고싶조</span>
-    <a href="#" id="obReopen">안내 다시 보기</a>
   </div>
 </div>
 
@@ -544,7 +552,7 @@ body{
   <div class="ob" role="dialog" aria-modal="true" aria-label="스키장 안전 안내">
     <button class="ob-x" id="obX" type="button" aria-label="닫기">✕</button>
     <div class="ob-body">
-      <img src="assets/onboarding.svg" alt="스키장 안전 안내 — 다시 붐비는 슬로프, 언제 타야 안전할까요? 지난 시즌 전국 스키장 이용객은 약 435만 명으로 코로나 이전 수준을 회복했습니다. 전국 스키장 이용객 수 추이 차트.">
+      <img src="assets/onboarding.svg" alt="스키장 안전 안내 — 쇠퇴하는 스키장, 데이터로 되살립니다. 지난 시즌 전국 스키장 이용객은 약 435만 명으로 코로나 이전 수준을 회복했습니다. 전국 스키장 이용객 수 추이 차트.">
     </div>
     <div class="ob-foot">
       <button class="ob-start" id="obStart" type="button">시작하기</button>
@@ -962,25 +970,18 @@ body{
     window.__fbUpdate = update;   // 데모·테스트용: 특정 시각을 주입해 상태 확인
   })();
 
-  // ---- 첫 접속 온보딩 팝업: 한 번 닫으면 다시 띄우지 않는다 ----
+  // ---- 프로젝트 소개 팝업: 상단 팀명을 누르면 열린다 (자동 표시 없음) ----
   (function(){
-    const KEY = 'h1OnboardSeen';
     const back = document.getElementById('obBack');
     const open = () => back.classList.add('open');
-    const close = () => {
-      back.classList.remove('open');
-      try { localStorage.setItem(KEY, '1'); } catch (e) { /* 시크릿 모드 등 */ }
-    };
+    const close = () => back.classList.remove('open');
+    document.getElementById('obOpen').addEventListener('click', open);
     document.getElementById('obX').addEventListener('click', close);
     document.getElementById('obStart').addEventListener('click', close);
     back.addEventListener('click', e => { if (e.target === back) close(); });
     document.addEventListener('keydown', e => {
       if (e.key === 'Escape' && back.classList.contains('open')) close();
     });
-    document.getElementById('obReopen').addEventListener('click', e => { e.preventDefault(); open(); });
-    let seen = null;
-    try { seen = localStorage.getItem(KEY); } catch (e) {}
-    if (!seen) open();
   })();
 
   // ---- 사고 신고 버튼: 패널 토글 (바깥 클릭·Esc 로 닫힘) ----
