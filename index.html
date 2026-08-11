@@ -1,0 +1,490 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="강원랜드 공공데이터 3종으로 만든 하이원 스키장 시간대별 혼잡·사고 위험 예보 서비스">
+<meta name="theme-color" content="#2f6fb8">
+<title>하이원 스키 예보 — 스키장 혼잡·사고 위험 통합 예보</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>❄️</text></svg>">
+<link rel="stylesheet" href="shared/base.css">
+<style>
+/* ============================================================
+   하이원 스키 예보 — 예보형 (최종 확정 디자인)
+   기상청 날씨앱 문법: 부드러운 하늘색, 큰 신호등, 가로 시간대 스트립
+   ============================================================ */
+:root{
+  --bg:#eef4fb; --card:#ffffff; --ink:#0b1a2b; --ink2:#4a5c70; --muted:#7b8ca0;
+  --line:#dde6f1; --hair:#eaf0f7;
+  --sky1:#2f6fb8; --sky2:#5aa0dd; --sky3:#9ccdf0;
+  --good:#0ca30c; --warning:#fab219; --critical:#d03b3b;
+  --series:#2a78d6;
+
+  /* 차트 엔진 계약 */
+  --viz-surface:#ffffff; --viz-ink:#0b1a2b; --viz-ink-2:#4a5c70; --viz-muted:#7b8ca0;
+  --viz-grid:#eaf0f7; --viz-axis:#dde6f1; --viz-series:#2a78d6;
+  --viz-seq:#cde2fb,#9ec5f4,#5598e7,#256abf,#0d366b;
+  --viz-empty:rgba(11,26,43,.06); --viz-hover:rgba(42,120,214,.07); --viz-focus:#2a78d6;
+  --viz-tip-bg:#0b1a2b; --viz-tip-ink:#ffffff; --viz-tip-border:rgba(255,255,255,.14);
+}
+html{ -webkit-text-size-adjust:100%; }
+body{
+  margin:0; background:var(--bg); color:var(--ink);
+  font-family:system-ui,-apple-system,"Segoe UI","Malgun Gothic",sans-serif;
+  line-height:1.6; -webkit-font-smoothing:antialiased;
+}
+.wrap{ max-width:960px; margin:0 auto; padding:0 16px 64px; }
+
+/* ---------- 헤더 ---------- */
+.topbar{
+  background:linear-gradient(160deg,var(--sky1),var(--sky2) 55%,var(--sky3));
+  color:#fff; padding:22px 0 78px; position:relative; overflow:hidden;
+}
+.topbar::after{
+  content:""; position:absolute; left:0; right:0; bottom:-1px; height:44px;
+  background:var(--bg); border-radius:26px 26px 0 0;
+}
+.topbar .wrap{ padding-bottom:0; position:relative; z-index:1; }
+.brand{ display:flex; align-items:center; gap:10px; font-weight:800; letter-spacing:-.02em; }
+.brand .mark{
+  width:30px; height:30px; border-radius:9px; background:rgba(255,255,255,.2);
+  display:grid; place-items:center; font-size:16px;
+}
+.brand h1{ margin:0; font-size:16px; font-weight:800; }
+.brand .team{ margin-left:auto; font-size:11.5px; font-weight:600; opacity:.85; }
+.tagline{ margin:14px 0 0; font-size:25px; font-weight:800; letter-spacing:-.03em; line-height:1.3; }
+.tagline small{ display:block; font-size:13.5px; font-weight:500; opacity:.9; margin-top:7px; letter-spacing:0; }
+
+/* ---------- 필터 (모든 차트를 한 번에 스코프) ---------- */
+.filters{
+  position:sticky; top:0; z-index:20; margin:-46px 0 20px;
+  background:var(--card); border:1px solid var(--line); border-radius:16px;
+  padding:13px 15px; box-shadow:0 6px 22px rgba(11,26,43,.09);
+}
+.frow{ display:flex; align-items:center; gap:9px; flex-wrap:wrap; }
+.frow + .frow{ margin-top:10px; padding-top:10px; border-top:1px solid var(--hair); }
+.flabel{ font-size:11.5px; font-weight:700; color:var(--muted); min-width:38px; letter-spacing:.02em; }
+.chip{
+  font:inherit; font-size:13px; font-weight:600; color:var(--ink2);
+  padding:6px 13px; border-radius:999px; border:1px solid var(--line);
+  background:#fff; cursor:pointer; transition:.15s;
+}
+.chip:hover{ border-color:var(--series); color:var(--series); }
+.chip[aria-pressed="true"]{ background:var(--series); border-color:var(--series); color:#fff; }
+.chip.wk[aria-pressed="true"]{ background:#0b1a2b; border-color:#0b1a2b; }
+
+/* ---------- 신호등 히어로 ---------- */
+.hero{
+  background:var(--card); border:1px solid var(--line); border-radius:20px;
+  padding:22px; margin-bottom:16px; box-shadow:0 2px 10px rgba(11,26,43,.05);
+}
+.hero-top{ display:flex; gap:18px; align-items:center; flex-wrap:wrap; }
+.signal{
+  width:104px; height:104px; border-radius:30px; flex:none;
+  display:grid; place-items:center; gap:2px; color:#fff; text-align:center;
+}
+.signal .ic{ font-size:30px; line-height:1; font-weight:700; }
+.signal .lb{ font-size:15px; font-weight:800; letter-spacing:.02em; }
+.hero-txt{ flex:1; min-width:230px; }
+.hero-when{ font-size:12.5px; font-weight:700; color:var(--muted); letter-spacing:.02em; }
+.hero-head{ margin:3px 0 5px; font-size:22px; font-weight:800; letter-spacing:-.02em; line-height:1.35; }
+.hero-desc{ margin:0; font-size:13.5px; color:var(--ink2); }
+.hero-grid{
+  display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+  gap:10px; margin-top:18px; padding-top:18px; border-top:1px solid var(--hair);
+}
+.mini{ background:#f6f9fd; border-radius:13px; padding:12px 14px; }
+.mini dt{ font-size:11.5px; font-weight:700; color:var(--muted); margin:0 0 3px; }
+.mini dd{ margin:0; font-size:19px; font-weight:800; letter-spacing:-.02em; }
+.mini .sub{ font-size:11.5px; font-weight:600; color:var(--ink2); }
+
+/* ---------- 시간대 스트립 ---------- */
+.strip-scroll{ overflow-x:auto; padding:4px 0 10px; margin:0 -4px; }
+.strip{ display:flex; gap:8px; padding:0 4px; min-width:min-content; }
+.hcard{
+  flex:none; width:66px; border-radius:14px; border:1px solid var(--line);
+  background:#fff; padding:10px 6px 11px; text-align:center;
+}
+.hcard.brk{ background:#f6f8fa; }
+.hcard .hh{ font-size:12.5px; font-weight:700; font-variant-numeric:tabular-nums; }
+.hcard .ic{ font-size:15px; font-weight:800; margin:6px 0 5px; line-height:1; }
+.gauge{ height:52px; width:9px; margin:0 auto 7px; background:var(--hair); border-radius:5px; position:relative; }
+.gauge i{ position:absolute; left:0; right:0; bottom:0; border-radius:5px; display:block; }
+.hcard .sc{ font-size:11px; font-weight:700; color:var(--ink2); font-variant-numeric:tabular-nums; }
+.hcard .lv{ font-size:10.5px; font-weight:700; margin-top:2px; }
+
+/* ---------- 카드 ---------- */
+.card{
+  background:var(--card); border:1px solid var(--line); border-radius:18px;
+  padding:20px; margin-bottom:16px; box-shadow:0 2px 10px rgba(11,26,43,.05);
+}
+.card > .ch-root + .ch-root{ margin-top:26px; padding-top:22px; border-top:1px solid var(--hair); }
+.sect{ margin:30px 0 12px; display:flex; align-items:baseline; gap:9px; }
+.sect h2{ margin:0; font-size:17px; font-weight:800; letter-spacing:-.02em; }
+.sect span{ font-size:12.5px; color:var(--muted); font-weight:600; }
+.two{ display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+@media (max-width:720px){ .two{ grid-template-columns:1fr; } }
+
+/* ---------- 인사이트 배너 ---------- */
+.note{
+  display:flex; gap:11px; align-items:flex-start; background:#f2f7fd;
+  border:1px solid #dbe8f7; border-left:3px solid var(--series);
+  border-radius:11px; padding:12px 14px; font-size:13px; color:var(--ink2); margin-top:14px;
+}
+.note b{ color:var(--ink); }
+.note .ic{ flex:none; font-size:14px; line-height:1.5; }
+
+/* ---------- 배치 테이블 ---------- */
+.staff{ width:100%; border-collapse:collapse; font-size:13px; }
+.staff th,.staff td{ padding:9px 8px; border-bottom:1px solid var(--hair); text-align:right; }
+.staff th{ font-size:11.5px; color:var(--muted); font-weight:700; }
+.staff th:first-child,.staff td:first-child{ text-align:left; }
+.staff td.hh{ font-weight:700; font-variant-numeric:tabular-nums; }
+.badge{
+  display:inline-flex; align-items:center; gap:4px; padding:2px 9px; border-radius:999px;
+  font-size:11.5px; font-weight:700; color:#fff;
+}
+.crew{ display:inline-flex; gap:3px; }
+.crew i{ width:7px; height:15px; border-radius:2px; background:var(--series); display:block; }
+.crew i.off{ background:var(--hair); }
+
+/* ---------- 플로팅 예보 바 ----------
+   히어로가 화면 밖으로 나가면 하단에 핵심 예보를 띄워
+   스크롤 중에도 "언제가 위험한가"를 놓치지 않게 한다 */
+.floatbar{
+  position:fixed; left:50%; bottom:14px; z-index:40;
+  transform:translate(-50%, calc(100% + 20px));
+  width:min(640px, calc(100vw - 24px));
+  display:flex; align-items:center; gap:12px;
+  background:rgba(255,255,255,.92); backdrop-filter:blur(10px);
+  border:1px solid var(--line); border-radius:16px;
+  padding:10px 14px; box-shadow:0 10px 32px rgba(11,26,43,.18);
+  cursor:pointer; transition:transform .28s ease, opacity .28s ease;
+  opacity:0; pointer-events:none;
+  font:inherit; color:inherit; text-align:left;
+}
+.floatbar.on{ transform:translate(-50%, 0); opacity:1; pointer-events:auto; }
+.floatbar .fsig{
+  width:44px; height:44px; border-radius:13px; flex:none;
+  display:grid; place-items:center; gap:0; color:#fff;
+}
+.floatbar .fsig .i{ font-size:16px; font-weight:800; line-height:1.1; }
+.floatbar .fsig .l{ font-size:9.5px; font-weight:800; line-height:1; }
+.floatbar .ftxt{ flex:1; min-width:0; }
+.floatbar .fwhen{ display:block; font-size:11px; font-weight:700; color:var(--muted); }
+.floatbar .fmain{
+  display:block; font-size:14.5px; font-weight:800; letter-spacing:-.015em; line-height:1.3;
+  white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+}
+.floatbar .fscore{
+  flex:none; text-align:right; padding-left:10px; border-left:1px solid var(--hair);
+}
+.floatbar .fscore .n{ font-size:19px; font-weight:800; letter-spacing:-.02em; line-height:1.1; }
+.floatbar .fscore .u{ font-size:10.5px; font-weight:700; color:var(--muted); }
+.floatbar .fup{ flex:none; font-size:15px; color:var(--muted); }
+.floatbar:hover{ border-color:var(--series); }
+.floatbar:focus-visible{ outline:2px solid var(--series); outline-offset:2px; }
+@media (max-width:480px){
+  .floatbar .fscore{ display:none; }
+}
+
+/* ---------- 출처 ---------- */
+.src{ font-size:12px; color:var(--muted); }
+.src h3{ font-size:13px; color:var(--ink); margin:0 0 8px; }
+.src ul{ margin:0; padding-left:17px; }
+.src li{ margin-bottom:5px; }
+.src a{ color:var(--series); }
+.foot{
+  display:flex; justify-content:space-between; align-items:center; gap:12px;
+  flex-wrap:wrap; margin-top:20px; font-size:12.5px; color:var(--muted);
+}
+.foot a{ color:var(--series); font-weight:600; text-decoration:none; }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="wrap">
+    <div class="brand">
+      <span class="mark" aria-hidden="true">❄</span>
+      <h1>하이원 스키 예보</h1>
+      <span class="team">강원랜드가고싶조</span>
+    </div>
+    <p class="tagline">
+      오늘, 언제 타는 게 가장 안전할까요?
+      <small>강원랜드 공공데이터 3종으로 만든 시간대별 혼잡·사고 위험 예보</small>
+    </p>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <!-- 필터: 한 줄에 모아 모든 차트를 동시에 스코프한다 -->
+  <div class="filters" role="group" aria-label="조회 조건">
+    <div class="frow">
+      <span class="flabel">시즌</span>
+      <div id="fMonth" class="frow" style="gap:7px"></div>
+    </div>
+    <div class="frow">
+      <span class="flabel">요일</span>
+      <div id="fDow" class="frow" style="gap:7px"></div>
+    </div>
+  </div>
+
+  <!-- 히어로 신호등 -->
+  <section class="hero" aria-live="polite">
+    <div class="hero-top">
+      <div class="signal" id="sigBox">
+        <span class="ic" id="sigIcon">✓</span>
+        <span class="lb" id="sigLabel">안전</span>
+      </div>
+      <div class="hero-txt">
+        <div class="hero-when" id="heroWhen"></div>
+        <h2 class="hero-head" id="heroHead"></h2>
+        <p class="hero-desc" id="heroDesc"></p>
+      </div>
+    </div>
+    <dl class="hero-grid">
+      <div class="mini"><dt>추천 시간대 (주간)</dt><dd id="mBest"></dd><div class="sub" id="mBestSub"></div></div>
+      <div class="mini"><dt>피해야 할 시간대</dt><dd id="mWorst"></dd><div class="sub" id="mWorstSub"></div></div>
+      <div class="mini"><dt>혼잡지수</dt><dd id="mCrowd"></dd><div class="sub" id="mCrowdSub"></div></div>
+      <div class="mini"><dt>예상 리프트권</dt><dd id="mLift"></dd><div class="sub">해당 월·요일 일평균</div></div>
+    </dl>
+  </section>
+
+  <!-- 시간대 스트립 -->
+  <section class="card">
+    <div class="ch-head">
+      <h3 class="ch-title">시간대별 위험 예보</h3>
+      <p class="ch-sub">사고 프로파일에 요일·시즌 혼잡과 월별 사고율을 반영한 0–100 지수입니다. 색 외에 아이콘과 등급 이름을 함께 표시합니다.</p>
+    </div>
+    <div class="strip-scroll"><div class="strip" id="strip"></div></div>
+    <div id="cRiskBars" style="margin-top:18px"></div>
+  </section>
+
+  <div class="sect"><h2>사고 패턴</h2><span id="sectAcc"></span></div>
+  <section class="card">
+    <div id="cHour"></div>
+    <div class="note" id="noteHour"></div>
+  </section>
+
+  <div class="two">
+    <section class="card"><div id="cMonthAcc"></div></section>
+    <section class="card"><div id="cMonthRate"></div><div class="note" id="noteRate"></div></section>
+  </div>
+
+  <section class="card"><div id="cHeat"></div></section>
+
+  <div class="sect"><h2>혼잡 패턴</h2><span>리프트권 발매현황 2024</span></div>
+  <section class="card">
+    <div id="cDow"></div>
+    <div class="note" id="noteDow"></div>
+  </section>
+
+  <div class="sect"><h2>운영자용 · 안전요원 배치 추천</h2><span>사고 다발 시간대 자동 추출</span></div>
+  <section class="card">
+    <div class="ch-head">
+      <h3 class="ch-title" id="staffTitle"></h3>
+      <p class="ch-sub">선택한 조건에서 사고 절대건수가 많은 상위 5개 시간대입니다. 배치 등급은 위험지수 구간(안전/주의/위험)에 대응합니다.</p>
+    </div>
+    <table class="staff">
+      <thead><tr><th>순위</th><th>시간대</th><th>사고건수</th><th>누적 비중</th><th>위험지수</th><th>배치 등급</th></tr></thead>
+      <tbody id="staffBody"></tbody>
+    </table>
+  </section>
+
+  <div class="sect"><h2>계절 기상 참고</h2><span>하이원리조트 2017–2019</span></div>
+  <section class="card">
+    <div id="cWx"></div>
+    <div class="note" id="noteWx"></div>
+  </section>
+
+  <section class="card src">
+    <h3>활용 데이터 및 산출 방법</h3>
+    <ul id="srcList"></ul>
+    <p style="margin:12px 0 0" id="method"></p>
+  </section>
+
+  <div class="foot">
+    <span>SDU COSS 공공데이터 활용 바이브코딩 · 팀 강원랜드가고싶조</span>
+    <a href="compare.html">검토했던 디자인 시안 4종 비교 →</a>
+  </div>
+</div>
+
+<!-- 플로팅 예보 바: 히어로가 화면 밖일 때만 표시, 누르면 예보로 복귀 -->
+<button class="floatbar" id="floatbar" type="button" aria-hidden="true" tabindex="-1"
+        title="예보 요약 — 누르면 상단 예보로 이동">
+  <span class="fsig" id="fbSig"><span class="i" id="fbIcon">!</span><span class="l" id="fbLabel">주의</span></span>
+  <span class="ftxt">
+    <span class="fwhen" id="fbWhen"></span>
+    <span class="fmain" id="fbMain"></span>
+  </span>
+  <span class="fscore"><span class="n" id="fbScore"></span><br><span class="u">위험지수</span></span>
+  <span class="fup" aria-hidden="true">↑</span>
+</button>
+
+<script src="data/dataset.js?v=2"></script>
+<script src="shared/model.js?v=2"></script>
+<script src="shared/charts.js?v=2"></script>
+<script src="shared/app.js?v=2"></script>
+<script>
+(function(){
+  const M = window.MODEL, D = M.D, A = window.APP;
+  const state = { month: 1, dow: 5 };
+  const STATUS = { good:'var(--good)', warning:'var(--warning)', critical:'var(--critical)' };
+  const col = lv => STATUS[lv.token];
+
+  // ---- 섹션 라벨: 하드코딩 대신 데이터에서 ----
+  document.getElementById('sectAcc').textContent =
+    `${D.meta.sources[0].period}년 실측 ${M.num(M.summary.totalAccidents)}건`;
+
+  // ---- 필터 칩 ----
+  A.chips(document.getElementById('fMonth'), M.MONTHS.map(m => ({ v:m, t:m+'월' })),
+    () => state.month, v => { state.month = v; render(); });
+  A.chips(document.getElementById('fDow'), M.DOW_KO.map((t,i) => ({ v:i, t })),
+    () => state.dow, v => { state.dow = v; render(); }, 'wk');
+
+  function render(){
+    A.syncChips();
+    const { month:m, dow:w } = state;
+    const prof = M.dayProfile(m, w);
+    const rec  = M.recommend(m, w);
+    const when = `${m}월 ${M.DOW_KO[w]}요일`;
+
+    // ---- 히어로 : 그 날의 최고 위험 시간대를 대표값으로 ----
+    const peak = prof.reduce((a,b) => b.score > a.score ? b : a);
+    document.getElementById('sigBox').style.background = col(peak.level);
+    document.getElementById('sigIcon').textContent = peak.level.icon;
+    document.getElementById('sigLabel').textContent = peak.level.label;
+    document.getElementById('heroWhen').textContent = when + ' 예보';
+    document.getElementById('heroHead').innerHTML =
+      `가장 위험한 시간대는 <b>${M.hrange(peak.hour)}</b>`;
+    document.getElementById('heroDesc').textContent =
+      `${peak.level.desc} · 위험지수 ${peak.score}점 (100점 만점, ${M.riskMaxLabel}가 100점)`;
+
+    // ---- 플로팅 바 동기화 ----
+    document.getElementById('fbSig').style.background = col(peak.level);
+    document.getElementById('fbIcon').textContent = peak.level.icon;
+    document.getElementById('fbLabel').textContent = peak.level.label;
+    document.getElementById('fbWhen').textContent = when + ' 예보';
+    document.getElementById('fbMain').textContent = `가장 위험한 시간대는 ${M.hrange(peak.hour)}`;
+    document.getElementById('fbScore').textContent = peak.score;
+
+    const b = rec.bestDay, wst = rec.worst[0];
+    document.getElementById('mBest').textContent = M.hhmm(b.hour);
+    document.getElementById('mBestSub').textContent =
+      `위험지수 ${b.score} · ${b.level.label} · 야간은 ${M.hhmm(rec.bestNight.hour)}(${rec.bestNight.score})`;
+    document.getElementById('mWorst').textContent = M.hhmm(wst.hour);
+    document.getElementById('mWorstSub').textContent = `위험지수 ${wst.score} · ${wst.level.label}`;
+    const ci = M.crowdIndex(m, w);
+    document.getElementById('mCrowd').textContent = ci;
+    document.getElementById('mCrowdSub').textContent = A.crowdWord(ci);
+    const est = Math.round(D.meta.meanDaily * M.monthCrowdF[m] * M.dowF[w]);
+    document.getElementById('mLift').textContent = M.num(est) + '매';
+
+    // ---- 시간대 스트립 ----
+    const strip = document.getElementById('strip');
+    strip.innerHTML = '';
+    prof.forEach(p => {
+      const brk = p.session.key === 'break';
+      const c = document.createElement('div');
+      c.className = 'hcard' + (brk ? ' brk' : '');
+      c.innerHTML =
+        `<div class="hh">${M.pad(p.hour)}시</div>
+         <div class="ic" style="color:${brk?'var(--muted)':col(p.level)}">${brk?'—':p.level.icon}</div>
+         <div class="gauge"><i style="height:${Math.max(3,p.score)}%;background:${brk?'var(--muted)':col(p.level)}"></i></div>
+         <div class="sc">${p.score}</div>
+         <div class="lv" style="color:${brk?'var(--muted)':col(p.level)}">${brk?'정비':p.level.label}</div>`;
+      c.title = brk
+        ? '주간→야간 전환 정비 시간대'
+        : `${M.hrange(p.hour)} · 위험지수 ${p.score} (${p.level.label}) · 2024년 사고 ${p.accidents}건`;
+      strip.appendChild(c);
+    });
+
+    // ---- 위험지수 막대 ----
+    CH.bars(document.getElementById('cRiskBars'), {
+      title: `${when} 위험지수 곡선`,
+      subtitle: `점선 없이 막대 위 기호로 등급을 함께 표시합니다. ✓ 안전 · ! 주의 · ✕ 위험 (${M.T1}점·${M.T2}점 경계)`,
+      data: prof.map(p => ({
+        label: M.pad(p.hour), value: p.score, p,
+        emphasis: p.hour === peak.hour, dim: p.session.key === 'break',
+      })),
+      height: 230, yMax: 100, yTicks: 4,
+      color: d => col(d.p.level),
+      glyph: d => d.p.session.key === 'break' ? null : d.p.level.icon,
+      glyphColor: d => col(d.p.level),
+      directLabel: d => d.p.hour === peak.hour,
+      tooltip: d => [
+        [`${M.hrange(d.p.hour)} · ${d.p.level.label}`, ''],
+        ['위험지수', d.value],
+        ['2024년 사고', d.p.accidents + '건'],
+        ['전체 사고 중', d.p.share + '%'],
+        ['운영 구분', d.p.session.label],
+      ],
+      xTitle: '시각',
+      table: {
+        cols: ['시각','위험지수','등급','2024년 사고','비중'],
+        rows: prof.map(p => [M.hrange(p.hour), p.score, p.level.label, p.accidents + '건', p.share + '%']),
+        caption: `${when} 기준 · 위험지수는 시간대 사고 프로파일 × 혼잡 보정 × 월 사고율 계수`,
+      },
+    });
+
+    // ---- 안전요원 배치 ----
+    const st = M.staffing(m, w);
+    document.getElementById('staffTitle').textContent = `${when} 집중 배치 우선순위`;
+    const tb = document.getElementById('staffBody');
+    tb.innerHTML = '';
+    let cum = 0;
+    st.forEach(s => {
+      cum += s.cover;
+      const tr = document.createElement('tr');
+      tr.innerHTML =
+        `<td>${s.rank}</td>
+         <td class="hh">${M.hrange(s.hour)}</td>
+         <td>${s.accidents}건</td>
+         <td>${cum.toFixed(1)}%</td>
+         <td>${s.score}</td>
+         <td><span class="badge" style="background:${col(s.level)}">${s.level.icon} ${s.level.label}</span>
+             <span class="crew" title="배치 등급 ${s.crew}/3" aria-label="배치 등급 ${s.crew}단계">
+               ${[1,2,3].map(i => `<i class="${i<=s.crew?'':'off'}"></i>`).join('')}
+             </span></td>`;
+      tb.appendChild(tr);
+    });
+  }
+
+  // ---- 조건과 무관한 고정 차트 ----
+  A.staticCharts({
+    hour:'cHour', monthAcc:'cMonthAcc', monthRate:'cMonthRate',
+    heat:'cHeat', dow:'cDow', wx:'cWx',
+    noteHour:'noteHour', noteRate:'noteRate', noteDow:'noteDow', noteWx:'noteWx',
+    srcList:'srcList', method:'method',
+  });
+
+  render();
+
+  // ---- 플로팅 바 표시 제어: 히어로가 화면 밖일 때만 ----
+  (function(){
+    const bar = document.getElementById('floatbar');
+    const hero = document.querySelector('.hero');
+    bar.addEventListener('click', () => {
+      hero.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+    const set = show => {
+      bar.classList.toggle('on', show);
+      bar.setAttribute('aria-hidden', String(!show));
+      bar.tabIndex = show ? 0 : -1;
+    };
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(
+        ([e]) => set(!e.isIntersecting && e.boundingClientRect.top < 0),
+        { threshold: 0 }
+      ).observe(hero);
+    } else {
+      addEventListener('scroll',
+        () => set(hero.getBoundingClientRect().bottom < 0), { passive: true });
+    }
+  })();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,56 @@
+/* 차트 껍데기 공통 구조 — 색은 전부 각 시안의 CSS 변수에서 가져온다 */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+.ch-root { width: 100%; }
+.ch-head { margin: 0 0 10px; }
+.ch-title {
+  margin: 0; font-size: 15px; font-weight: 700; letter-spacing: -0.01em;
+  color: var(--viz-ink);
+}
+.ch-sub {
+  margin: 4px 0 0; font-size: 12.5px; line-height: 1.5;
+  color: var(--viz-ink-2, var(--viz-muted));
+}
+.ch-plot { width: 100%; min-width: 0; }
+.ch-plot svg { max-width: 100%; }
+.ch-plot svg [tabindex]:focus-visible {
+  outline: 2px solid var(--viz-focus, currentColor);
+  outline-offset: 2px;
+}
+
+.ch-toggle {
+  margin-top: 10px; padding: 5px 11px; font: inherit; font-size: 11.5px; font-weight: 600;
+  color: var(--viz-ink-2, var(--viz-muted));
+  background: transparent; border: 1px solid var(--viz-axis); border-radius: 999px;
+  cursor: pointer; transition: background .15s, color .15s;
+}
+.ch-toggle:hover { background: var(--viz-hover, rgba(128,128,128,.09)); color: var(--viz-ink); }
+
+.ch-tablewrap { margin-top: 10px; overflow-x: auto; }
+.ch-table {
+  width: 100%; border-collapse: collapse; font-size: 12px;
+  font-variant-numeric: tabular-nums; color: var(--viz-ink);
+}
+.ch-table caption {
+  caption-side: bottom; padding-top: 8px; font-size: 11px;
+  color: var(--viz-muted); text-align: left;
+}
+.ch-table th, .ch-table td {
+  padding: 6px 10px; text-align: right; border-bottom: 1px solid var(--viz-grid);
+  white-space: nowrap;
+}
+.ch-table thead th {
+  text-align: right; font-weight: 700; color: var(--viz-ink-2, var(--viz-muted));
+  border-bottom: 1px solid var(--viz-axis);
+}
+.ch-table th[scope="row"], .ch-table thead th:first-child { text-align: left; }
+.ch-table tbody tr:hover { background: var(--viz-hover, rgba(128,128,128,.06)); }
+
+/* 저시력·강제 색상 모드에서는 색이 아니라 라벨이 의미를 옮긴다 */
+@media (forced-colors: active) {
+  .ch-plot svg path, .ch-plot svg rect { forced-color-adjust: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  * { animation-duration: .001ms !important; transition-duration: .001ms !important; }
+}

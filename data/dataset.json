@@ -1,0 +1,1207 @@
+{
+ "meta": {
+  "generated": "2026-08-05",
+  "sources": [
+   {
+    "name": "강원랜드 스키장 시간대별 사고 발생 현황",
+    "period": "2024",
+    "rows": 50,
+    "url": "https://www.data.go.kr/data/15154035/fileData.do"
+   },
+   {
+    "name": "강원랜드 하이원 스키장 리프트권 발매현황",
+    "period": "2024-01-01 ~ 2024-12-31 (영업일 117일)",
+    "rows": 2422,
+    "url": "https://www.data.go.kr/data/15134076/fileData.do"
+   },
+   {
+    "name": "강원랜드 하이원리조트 계절기상 정보",
+    "period": "2017 ~ 2019",
+    "rows": 1284,
+    "url": "https://www.data.go.kr/data/15054675/fileData.do"
+   }
+  ],
+  "totalAccidents": 552,
+  "totalLift": 209185,
+  "totalSeason": 52348,
+  "openDays": 117,
+  "meanDaily": 1787.9,
+  "wxLocations": [
+   "하이원 마운틴탑",
+   "하이원 벨리베이스"
+  ]
+ },
+ "hourly": [
+  {
+   "hour": 9,
+   "accidents": 12,
+   "share": 2.17,
+   "base": 13.5,
+   "byMonth": {
+    "12": 1,
+    "1": 3,
+    "2": 4,
+    "3": 4
+   }
+  },
+  {
+   "hour": 10,
+   "accidents": 49,
+   "share": 8.88,
+   "base": 55.1,
+   "byMonth": {
+    "12": 17,
+    "1": 18,
+    "2": 9,
+    "3": 5
+   }
+  },
+  {
+   "hour": 11,
+   "accidents": 66,
+   "share": 11.96,
+   "base": 74.2,
+   "byMonth": {
+    "12": 22,
+    "1": 20,
+    "2": 21,
+    "3": 3
+   }
+  },
+  {
+   "hour": 12,
+   "accidents": 57,
+   "share": 10.33,
+   "base": 64.0,
+   "byMonth": {
+    "12": 8,
+    "1": 30,
+    "2": 17,
+    "3": 2
+   }
+  },
+  {
+   "hour": 13,
+   "accidents": 51,
+   "share": 9.24,
+   "base": 57.3,
+   "byMonth": {
+    "12": 10,
+    "1": 19,
+    "2": 19,
+    "3": 3
+   }
+  },
+  {
+   "hour": 14,
+   "accidents": 56,
+   "share": 10.14,
+   "base": 62.9,
+   "byMonth": {
+    "12": 13,
+    "1": 22,
+    "2": 19,
+    "3": 2
+   }
+  },
+  {
+   "hour": 15,
+   "accidents": 89,
+   "share": 16.12,
+   "base": 100.0,
+   "byMonth": {
+    "12": 17,
+    "1": 40,
+    "2": 26,
+    "3": 6
+   }
+  },
+  {
+   "hour": 16,
+   "accidents": 37,
+   "share": 6.7,
+   "base": 41.6,
+   "byMonth": {
+    "12": 7,
+    "1": 14,
+    "2": 14,
+    "3": 2
+   }
+  },
+  {
+   "hour": 17,
+   "accidents": 1,
+   "share": 0.18,
+   "base": 1.1,
+   "byMonth": {
+    "12": 0,
+    "1": 1,
+    "2": 0,
+    "3": 0
+   }
+  },
+  {
+   "hour": 18,
+   "accidents": 15,
+   "share": 2.72,
+   "base": 16.9,
+   "byMonth": {
+    "12": 7,
+    "1": 7,
+    "2": 1,
+    "3": 0
+   }
+  },
+  {
+   "hour": 19,
+   "accidents": 28,
+   "share": 5.07,
+   "base": 31.5,
+   "byMonth": {
+    "12": 7,
+    "1": 8,
+    "2": 10,
+    "3": 3
+   }
+  },
+  {
+   "hour": 20,
+   "accidents": 54,
+   "share": 9.78,
+   "base": 60.7,
+   "byMonth": {
+    "12": 9,
+    "1": 25,
+    "2": 19,
+    "3": 1
+   }
+  },
+  {
+   "hour": 21,
+   "accidents": 29,
+   "share": 5.25,
+   "base": 32.6,
+   "byMonth": {
+    "12": 8,
+    "1": 8,
+    "2": 13,
+    "3": 0
+   }
+  },
+  {
+   "hour": 22,
+   "accidents": 8,
+   "share": 1.45,
+   "base": 9.0,
+   "byMonth": {
+    "12": 4,
+    "1": 2,
+    "2": 2,
+    "3": 0
+   }
+  }
+ ],
+ "months": [
+  {
+   "month": 12,
+   "accidents": 130,
+   "lift": 48268,
+   "days": 26,
+   "meanDaily": 1856.5,
+   "rate": 2.693,
+   "factor": 1.038
+  },
+  {
+   "month": 1,
+   "accidents": 217,
+   "lift": 81198,
+   "days": 31,
+   "meanDaily": 2619.3,
+   "rate": 2.672,
+   "factor": 1.465
+  },
+  {
+   "month": 2,
+   "accidents": 174,
+   "lift": 69576,
+   "days": 29,
+   "meanDaily": 2399.2,
+   "rate": 2.501,
+   "factor": 1.342
+  },
+  {
+   "month": 3,
+   "accidents": 31,
+   "lift": 10143,
+   "days": 31,
+   "meanDaily": 327.2,
+   "rate": 3.056,
+   "factor": 0.183
+  }
+ ],
+ "dow": [
+  {
+   "dow": 0,
+   "mean": 1731.3,
+   "days": 17,
+   "factor": 0.968
+  },
+  {
+   "dow": 1,
+   "mean": 1292,
+   "days": 17,
+   "factor": 0.723
+  },
+  {
+   "dow": 2,
+   "mean": 1307.2,
+   "days": 16,
+   "factor": 0.731
+  },
+  {
+   "dow": 3,
+   "mean": 1297.9,
+   "days": 16,
+   "factor": 0.726
+  },
+  {
+   "dow": 4,
+   "mean": 1659.4,
+   "days": 17,
+   "factor": 0.928
+  },
+  {
+   "dow": 5,
+   "mean": 3073,
+   "days": 17,
+   "factor": 1.719
+  },
+  {
+   "dow": 6,
+   "mean": 2097.4,
+   "days": 17,
+   "factor": 1.173
+  }
+ ],
+ "daily": [
+  {
+   "date": "2024-01-01",
+   "month": 1,
+   "dow": 0,
+   "lift": 1838,
+   "season": 101
+  },
+  {
+   "date": "2024-01-02",
+   "month": 1,
+   "dow": 1,
+   "lift": 1828,
+   "season": 71
+  },
+  {
+   "date": "2024-01-03",
+   "month": 1,
+   "dow": 2,
+   "lift": 1581,
+   "season": 48
+  },
+  {
+   "date": "2024-01-04",
+   "month": 1,
+   "dow": 3,
+   "lift": 1309,
+   "season": 38
+  },
+  {
+   "date": "2024-01-05",
+   "month": 1,
+   "dow": 4,
+   "lift": 1818,
+   "season": 61
+  },
+  {
+   "date": "2024-01-06",
+   "month": 1,
+   "dow": 5,
+   "lift": 4388,
+   "season": 135
+  },
+  {
+   "date": "2024-01-07",
+   "month": 1,
+   "dow": 6,
+   "lift": 2860,
+   "season": 94
+  },
+  {
+   "date": "2024-01-08",
+   "month": 1,
+   "dow": 0,
+   "lift": 3303,
+   "season": 56
+  },
+  {
+   "date": "2024-01-09",
+   "month": 1,
+   "dow": 1,
+   "lift": 1980,
+   "season": 48
+  },
+  {
+   "date": "2024-01-10",
+   "month": 1,
+   "dow": 2,
+   "lift": 1892,
+   "season": 36
+  },
+  {
+   "date": "2024-01-11",
+   "month": 1,
+   "dow": 3,
+   "lift": 2105,
+   "season": 51
+  },
+  {
+   "date": "2024-01-12",
+   "month": 1,
+   "dow": 4,
+   "lift": 2715,
+   "season": 45
+  },
+  {
+   "date": "2024-01-13",
+   "month": 1,
+   "dow": 5,
+   "lift": 5317,
+   "season": 96
+  },
+  {
+   "date": "2024-01-14",
+   "month": 1,
+   "dow": 6,
+   "lift": 3476,
+   "season": 71
+  },
+  {
+   "date": "2024-01-15",
+   "month": 1,
+   "dow": 0,
+   "lift": 3037,
+   "season": 104
+  },
+  {
+   "date": "2024-01-16",
+   "month": 1,
+   "dow": 1,
+   "lift": 2089,
+   "season": 79
+  },
+  {
+   "date": "2024-01-17",
+   "month": 1,
+   "dow": 2,
+   "lift": 1720,
+   "season": 70
+  },
+  {
+   "date": "2024-01-18",
+   "month": 1,
+   "dow": 3,
+   "lift": 1802,
+   "season": 74
+  },
+  {
+   "date": "2024-01-19",
+   "month": 1,
+   "dow": 4,
+   "lift": 2537,
+   "season": 98
+  },
+  {
+   "date": "2024-01-20",
+   "month": 1,
+   "dow": 5,
+   "lift": 5275,
+   "season": 81
+  },
+  {
+   "date": "2024-01-21",
+   "month": 1,
+   "dow": 6,
+   "lift": 3404,
+   "season": 76
+  },
+  {
+   "date": "2024-01-22",
+   "month": 1,
+   "dow": 0,
+   "lift": 2598,
+   "season": 39
+  },
+  {
+   "date": "2024-01-23",
+   "month": 1,
+   "dow": 1,
+   "lift": 1636,
+   "season": 35
+  },
+  {
+   "date": "2024-01-24",
+   "month": 1,
+   "dow": 2,
+   "lift": 1816,
+   "season": 25
+  },
+  {
+   "date": "2024-01-25",
+   "month": 1,
+   "dow": 3,
+   "lift": 1501,
+   "season": 41
+  },
+  {
+   "date": "2024-01-26",
+   "month": 1,
+   "dow": 4,
+   "lift": 2359,
+   "season": 33
+  },
+  {
+   "date": "2024-01-27",
+   "month": 1,
+   "dow": 5,
+   "lift": 5063,
+   "season": 39
+  },
+  {
+   "date": "2024-01-28",
+   "month": 1,
+   "dow": 6,
+   "lift": 3369,
+   "season": 59
+  },
+  {
+   "date": "2024-01-29",
+   "month": 1,
+   "dow": 0,
+   "lift": 3005,
+   "season": 27
+  },
+  {
+   "date": "2024-01-30",
+   "month": 1,
+   "dow": 1,
+   "lift": 1730,
+   "season": 28
+  },
+  {
+   "date": "2024-01-31",
+   "month": 1,
+   "dow": 2,
+   "lift": 1847,
+   "season": 12
+  },
+  {
+   "date": "2024-02-01",
+   "month": 2,
+   "dow": 3,
+   "lift": 1718,
+   "season": 31
+  },
+  {
+   "date": "2024-02-02",
+   "month": 2,
+   "dow": 4,
+   "lift": 2213,
+   "season": 12
+  },
+  {
+   "date": "2024-02-03",
+   "month": 2,
+   "dow": 5,
+   "lift": 5325,
+   "season": 19
+  },
+  {
+   "date": "2024-02-04",
+   "month": 2,
+   "dow": 6,
+   "lift": 2914,
+   "season": 12
+  },
+  {
+   "date": "2024-02-05",
+   "month": 2,
+   "dow": 0,
+   "lift": 3172,
+   "season": 5
+  },
+  {
+   "date": "2024-02-06",
+   "month": 2,
+   "dow": 1,
+   "lift": 1714,
+   "season": 7
+  },
+  {
+   "date": "2024-02-07",
+   "month": 2,
+   "dow": 2,
+   "lift": 1305,
+   "season": 6
+  },
+  {
+   "date": "2024-02-08",
+   "month": 2,
+   "dow": 3,
+   "lift": 1563,
+   "season": 19
+  },
+  {
+   "date": "2024-02-09",
+   "month": 2,
+   "dow": 4,
+   "lift": 2808,
+   "season": 24
+  },
+  {
+   "date": "2024-02-10",
+   "month": 2,
+   "dow": 5,
+   "lift": 2978,
+   "season": 10
+  },
+  {
+   "date": "2024-02-11",
+   "month": 2,
+   "dow": 6,
+   "lift": 4219,
+   "season": 11
+  },
+  {
+   "date": "2024-02-12",
+   "month": 2,
+   "dow": 0,
+   "lift": 2879,
+   "season": 10
+  },
+  {
+   "date": "2024-02-13",
+   "month": 2,
+   "dow": 1,
+   "lift": 2431,
+   "season": 6
+  },
+  {
+   "date": "2024-02-14",
+   "month": 2,
+   "dow": 2,
+   "lift": 2161,
+   "season": 2
+  },
+  {
+   "date": "2024-02-15",
+   "month": 2,
+   "dow": 3,
+   "lift": 1579,
+   "season": 3
+  },
+  {
+   "date": "2024-02-16",
+   "month": 2,
+   "dow": 4,
+   "lift": 2718,
+   "season": 1
+  },
+  {
+   "date": "2024-02-17",
+   "month": 2,
+   "dow": 5,
+   "lift": 5207,
+   "season": 14
+  },
+  {
+   "date": "2024-02-18",
+   "month": 2,
+   "dow": 6,
+   "lift": 2990,
+   "season": 3
+  },
+  {
+   "date": "2024-02-19",
+   "month": 2,
+   "dow": 0,
+   "lift": 843,
+   "season": 5
+  },
+  {
+   "date": "2024-02-20",
+   "month": 2,
+   "dow": 1,
+   "lift": 1517,
+   "season": 3
+  },
+  {
+   "date": "2024-02-21",
+   "month": 2,
+   "dow": 2,
+   "lift": 1391,
+   "season": 3
+  },
+  {
+   "date": "2024-02-22",
+   "month": 2,
+   "dow": 3,
+   "lift": 1749,
+   "season": 3
+  },
+  {
+   "date": "2024-02-23",
+   "month": 2,
+   "dow": 4,
+   "lift": 2000,
+   "season": 6
+  },
+  {
+   "date": "2024-02-24",
+   "month": 2,
+   "dow": 5,
+   "lift": 4181,
+   "season": 3
+  },
+  {
+   "date": "2024-02-25",
+   "month": 2,
+   "dow": 6,
+   "lift": 2897,
+   "season": 7
+  },
+  {
+   "date": "2024-02-26",
+   "month": 2,
+   "dow": 0,
+   "lift": 1772,
+   "season": 2
+  },
+  {
+   "date": "2024-02-27",
+   "month": 2,
+   "dow": 1,
+   "lift": 1115,
+   "season": 1
+  },
+  {
+   "date": "2024-02-28",
+   "month": 2,
+   "dow": 2,
+   "lift": 961,
+   "season": 0
+  },
+  {
+   "date": "2024-02-29",
+   "month": 2,
+   "dow": 3,
+   "lift": 1256,
+   "season": 2
+  },
+  {
+   "date": "2024-03-01",
+   "month": 3,
+   "dow": 4,
+   "lift": 2707,
+   "season": 2
+  },
+  {
+   "date": "2024-03-02",
+   "month": 3,
+   "dow": 5,
+   "lift": 2181,
+   "season": 2
+  },
+  {
+   "date": "2024-03-03",
+   "month": 3,
+   "dow": 6,
+   "lift": 889,
+   "season": 1
+  },
+  {
+   "date": "2024-03-04",
+   "month": 3,
+   "dow": 0,
+   "lift": 249,
+   "season": 0
+  },
+  {
+   "date": "2024-03-05",
+   "month": 3,
+   "dow": 1,
+   "lift": 221,
+   "season": 0
+  },
+  {
+   "date": "2024-03-06",
+   "month": 3,
+   "dow": 2,
+   "lift": 144,
+   "season": 0
+  },
+  {
+   "date": "2024-03-07",
+   "month": 3,
+   "dow": 3,
+   "lift": 183,
+   "season": 0
+  },
+  {
+   "date": "2024-03-08",
+   "month": 3,
+   "dow": 4,
+   "lift": 175,
+   "season": 0
+  },
+  {
+   "date": "2024-03-09",
+   "month": 3,
+   "dow": 5,
+   "lift": 682,
+   "season": 1
+  },
+  {
+   "date": "2024-03-10",
+   "month": 3,
+   "dow": 6,
+   "lift": 538,
+   "season": 0
+  },
+  {
+   "date": "2024-03-11",
+   "month": 3,
+   "dow": 0,
+   "lift": 89,
+   "season": 0
+  },
+  {
+   "date": "2024-03-12",
+   "month": 3,
+   "dow": 1,
+   "lift": 80,
+   "season": 0
+  },
+  {
+   "date": "2024-03-13",
+   "month": 3,
+   "dow": 2,
+   "lift": 110,
+   "season": 0
+  },
+  {
+   "date": "2024-03-14",
+   "month": 3,
+   "dow": 3,
+   "lift": 91,
+   "season": 0
+  },
+  {
+   "date": "2024-03-15",
+   "month": 3,
+   "dow": 4,
+   "lift": 75,
+   "season": 0
+  },
+  {
+   "date": "2024-03-16",
+   "month": 3,
+   "dow": 5,
+   "lift": 159,
+   "season": 0
+  },
+  {
+   "date": "2024-03-17",
+   "month": 3,
+   "dow": 6,
+   "lift": 136,
+   "season": 0
+  },
+  {
+   "date": "2024-03-18",
+   "month": 3,
+   "dow": 0,
+   "lift": 91,
+   "season": 0
+  },
+  {
+   "date": "2024-03-19",
+   "month": 3,
+   "dow": 1,
+   "lift": 78,
+   "season": 0
+  },
+  {
+   "date": "2024-03-20",
+   "month": 3,
+   "dow": 2,
+   "lift": 118,
+   "season": 0
+  },
+  {
+   "date": "2024-03-21",
+   "month": 3,
+   "dow": 3,
+   "lift": 155,
+   "season": 0
+  },
+  {
+   "date": "2024-03-22",
+   "month": 3,
+   "dow": 4,
+   "lift": 149,
+   "season": 0
+  },
+  {
+   "date": "2024-03-23",
+   "month": 3,
+   "dow": 5,
+   "lift": 250,
+   "season": 0
+  },
+  {
+   "date": "2024-03-24",
+   "month": 3,
+   "dow": 6,
+   "lift": 248,
+   "season": 0
+  },
+  {
+   "date": "2024-03-25",
+   "month": 3,
+   "dow": 0,
+   "lift": 10,
+   "season": 0
+  },
+  {
+   "date": "2024-03-26",
+   "month": 3,
+   "dow": 1,
+   "lift": 36,
+   "season": 0
+  },
+  {
+   "date": "2024-03-27",
+   "month": 3,
+   "dow": 2,
+   "lift": 45,
+   "season": 0
+  },
+  {
+   "date": "2024-03-28",
+   "month": 3,
+   "dow": 3,
+   "lift": 19,
+   "season": 0
+  },
+  {
+   "date": "2024-03-29",
+   "month": 3,
+   "dow": 4,
+   "lift": 53,
+   "season": 0
+  },
+  {
+   "date": "2024-03-30",
+   "month": 3,
+   "dow": 5,
+   "lift": 139,
+   "season": 0
+  },
+  {
+   "date": "2024-03-31",
+   "month": 3,
+   "dow": 6,
+   "lift": 43,
+   "season": 0
+  },
+  {
+   "date": "2024-12-06",
+   "month": 12,
+   "dow": 4,
+   "lift": 607,
+   "season": 666
+  },
+  {
+   "date": "2024-12-07",
+   "month": 12,
+   "dow": 5,
+   "lift": 1468,
+   "season": 1149
+  },
+  {
+   "date": "2024-12-08",
+   "month": 12,
+   "dow": 6,
+   "lift": 1007,
+   "season": 618
+  },
+  {
+   "date": "2024-12-09",
+   "month": 12,
+   "dow": 0,
+   "lift": 968,
+   "season": 217
+  },
+  {
+   "date": "2024-12-10",
+   "month": 12,
+   "dow": 1,
+   "lift": 611,
+   "season": 129
+  },
+  {
+   "date": "2024-12-11",
+   "month": 12,
+   "dow": 2,
+   "lift": 1279,
+   "season": 104
+  },
+  {
+   "date": "2024-12-12",
+   "month": 12,
+   "dow": 3,
+   "lift": 1517,
+   "season": 151
+  },
+  {
+   "date": "2024-12-13",
+   "month": 12,
+   "dow": 4,
+   "lift": 1285,
+   "season": 310
+  },
+  {
+   "date": "2024-12-14",
+   "month": 12,
+   "dow": 5,
+   "lift": 2867,
+   "season": 988
+  },
+  {
+   "date": "2024-12-15",
+   "month": 12,
+   "dow": 6,
+   "lift": 1713,
+   "season": 589
+  },
+  {
+   "date": "2024-12-16",
+   "month": 12,
+   "dow": 0,
+   "lift": 1672,
+   "season": 224
+  },
+  {
+   "date": "2024-12-17",
+   "month": 12,
+   "dow": 1,
+   "lift": 1496,
+   "season": 147
+  },
+  {
+   "date": "2024-12-18",
+   "month": 12,
+   "dow": 2,
+   "lift": 2526,
+   "season": 163
+  },
+  {
+   "date": "2024-12-19",
+   "month": 12,
+   "dow": 3,
+   "lift": 1443,
+   "season": 179
+  },
+  {
+   "date": "2024-12-20",
+   "month": 12,
+   "dow": 4,
+   "lift": 1727,
+   "season": 226
+  },
+  {
+   "date": "2024-12-21",
+   "month": 12,
+   "dow": 5,
+   "lift": 3078,
+   "season": 746
+  },
+  {
+   "date": "2024-12-22",
+   "month": 12,
+   "dow": 6,
+   "lift": 2295,
+   "season": 555
+  },
+  {
+   "date": "2024-12-23",
+   "month": 12,
+   "dow": 0,
+   "lift": 1416,
+   "season": 237
+  },
+  {
+   "date": "2024-12-24",
+   "month": 12,
+   "dow": 1,
+   "lift": 1444,
+   "season": 210
+  },
+  {
+   "date": "2024-12-25",
+   "month": 12,
+   "dow": 2,
+   "lift": 2020,
+   "season": 476
+  },
+  {
+   "date": "2024-12-26",
+   "month": 12,
+   "dow": 3,
+   "lift": 2776,
+   "season": 191
+  },
+  {
+   "date": "2024-12-27",
+   "month": 12,
+   "dow": 4,
+   "lift": 2264,
+   "season": 208
+  },
+  {
+   "date": "2024-12-28",
+   "month": 12,
+   "dow": 5,
+   "lift": 3683,
+   "season": 524
+  },
+  {
+   "date": "2024-12-29",
+   "month": 12,
+   "dow": 6,
+   "lift": 2658,
+   "season": 377
+  },
+  {
+   "date": "2024-12-30",
+   "month": 12,
+   "dow": 0,
+   "lift": 2490,
+   "season": 172
+  },
+  {
+   "date": "2024-12-31",
+   "month": 12,
+   "dow": 1,
+   "lift": 1958,
+   "season": 195
+  }
+ ],
+ "weather": [
+  {
+   "month": 12,
+   "n": 83,
+   "tavg": -6.3,
+   "tmin": -11.5,
+   "tmax": -0.8,
+   "wind": 0.5,
+   "gust": 42.8,
+   "hum": 66.6,
+   "rainDays": 20,
+   "freezeDays": 45
+  },
+  {
+   "month": 1,
+   "n": 148,
+   "tavg": -7.7,
+   "tmin": -12.4,
+   "tmax": -1.9,
+   "wind": 1.8,
+   "gust": 41.6,
+   "hum": 71.4,
+   "rainDays": 23,
+   "freezeDays": 84
+  },
+  {
+   "month": 2,
+   "n": 129,
+   "tavg": -5.5,
+   "tmin": -10.7,
+   "tmax": 0.9,
+   "wind": 1.6,
+   "gust": 24.6,
+   "hum": 61.8,
+   "rainDays": 16,
+   "freezeDays": 50
+  },
+  {
+   "month": 3,
+   "n": 124,
+   "tavg": 1.9,
+   "tmin": -3.5,
+   "tmax": 9.2,
+   "wind": 1.8,
+   "gust": 43.0,
+   "hum": 69.5,
+   "rainDays": 35,
+   "freezeDays": 10
+  }
+ ],
+ "products": [
+  {
+   "name": "7시간권(대인)",
+   "qty": 40989
+  },
+  {
+   "name": "종일권(대인)",
+   "qty": 32913
+  },
+  {
+   "name": "4시간권(대인)",
+   "qty": 28726
+  },
+  {
+   "name": "3시간권(대인)",
+   "qty": 27240
+  },
+  {
+   "name": "L.연일권 3일 ",
+   "qty": 18211
+  },
+  {
+   "name": "5시간권(대인)",
+   "qty": 16751
+  },
+  {
+   "name": "L.연일권 2일 ",
+   "qty": 11946
+  },
+  {
+   "name": "3시간권(소인)",
+   "qty": 7750
+  },
+  {
+   "name": "4시간권(소인)",
+   "qty": 6220
+  },
+  {
+   "name": "7시간권(소인)",
+   "qty": 5378
+  },
+  {
+   "name": "L.연일권 4일 ",
+   "qty": 3763
+  },
+  {
+   "name": "종일권(소인)",
+   "qty": 3363
+  }
+ ]
+}
