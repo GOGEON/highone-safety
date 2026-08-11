@@ -55,9 +55,113 @@ body{
 .tagline{ margin:14px 0 0; font-size:25px; font-weight:800; letter-spacing:-.03em; line-height:1.3; }
 .tagline small{ display:block; font-size:13.5px; font-weight:500; opacity:.9; margin-top:7px; letter-spacing:0; }
 
+/* ---------- 방문 계획 (최상단 마스터 컨트롤) ---------- */
+.plan{
+  position:relative; z-index:5; margin:-46px 0 14px;
+  background:var(--card); border:1px solid var(--line); border-radius:16px;
+  padding:16px 18px 14px; box-shadow:0 6px 22px rgba(11,26,43,.09);
+}
+.plan h3{ margin:0; font-size:15px; font-weight:800; letter-spacing:-.01em; }
+.plan .psub{ margin:3px 0 15px; font-size:12.5px; color:var(--muted); }
+.plan-row{
+  display:grid; grid-template-columns:118px 1fr; gap:14px; align-items:center;
+  margin-bottom:10px;
+}
+.plan-row .plab{ font-size:11px; font-weight:700; color:var(--muted); letter-spacing:.02em; }
+.plan-row output{
+  display:block; font-size:15px; font-weight:800; letter-spacing:-.015em;
+  font-variant-numeric:tabular-nums; line-height:1.3;
+}
+.plan-date-btn{
+  display:inline-flex; align-items:center; gap:9px;
+  font:inherit; font-size:15px; font-weight:800; letter-spacing:-.015em; color:var(--ink);
+  padding:10px 15px; border:1px solid var(--line); border-radius:12px;
+  background:#fff; cursor:pointer; transition:.15s;
+}
+.plan-date-btn:hover{ border-color:var(--series); color:var(--series); }
+.plan-date-btn .cal-ic{ font-size:15px; }
+.plan-date-btn .chev{ font-size:11px; color:var(--muted); margin-left:2px; }
+
+/* 시간 선택: 위험도 점이 붙은 시간 버튼 줄 */
+.hour-pills{ display:flex; gap:6px; flex-wrap:wrap; }
+.hpill{
+  font:inherit; font-size:12.5px; font-weight:700; color:var(--ink2);
+  font-variant-numeric:tabular-nums;
+  width:47px; padding:6px 0 6px; border:1px solid var(--line); border-radius:10px;
+  background:#fff; cursor:pointer; transition:.13s;
+  display:flex; flex-direction:column; align-items:center; gap:4px;
+}
+.hpill .dot{ width:8px; height:8px; border-radius:50%; background:var(--muted); }
+.hpill:hover{ border-color:var(--series); color:var(--series); }
+.hpill[aria-pressed="true"]{
+  background:var(--series); border-color:var(--series); color:#fff;
+  box-shadow:0 3px 10px rgba(42,120,214,.35);
+}
+.hpill[aria-pressed="true"] .dot{ box-shadow:0 0 0 2px rgba(255,255,255,.85); }
+.hpill.brk{ color:var(--muted); background:#f6f8fa; }
+
+/* 캘린더 모달 */
+.cal-back{
+  position:fixed; inset:0; z-index:60; background:rgba(11,26,43,.45);
+  display:none; padding:16px;
+}
+.cal-back.open{ display:grid; place-items:center; }
+.cal{
+  width:min(350px, 100%); background:#fff; border-radius:18px;
+  padding:16px 16px 12px; box-shadow:0 20px 60px rgba(11,26,43,.35);
+}
+.cal-head{ display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; }
+.cal-title{ font-size:15px; font-weight:800; letter-spacing:-.01em; }
+.cal-nav{ display:flex; gap:4px; }
+.cal-nav button{
+  width:32px; height:32px; border:1px solid var(--line); border-radius:9px;
+  background:#fff; font-size:13px; color:var(--ink2); cursor:pointer;
+}
+.cal-nav button:hover:not(:disabled){ border-color:var(--series); color:var(--series); }
+.cal-nav button:disabled{ opacity:.35; cursor:default; }
+.cal-grid{ display:grid; grid-template-columns:repeat(7,1fr); gap:2px; }
+.cal-dow{
+  text-align:center; font-size:10.5px; font-weight:800; color:var(--muted);
+  padding:5px 0 7px; letter-spacing:.04em;
+}
+.cal-dow.sun{ color:var(--critical); }
+.cal-day{
+  aspect-ratio:1; border:none; border-radius:10px; background:none;
+  font:inherit; font-size:13px; font-weight:600; color:var(--ink);
+  font-variant-numeric:tabular-nums; cursor:pointer; transition:.12s;
+}
+.cal-day:hover:not(:disabled){ background:var(--viz-hover, rgba(42,120,214,.08)); }
+.cal-day:disabled{ color:#c9d4e2; cursor:default; }
+.cal-day.today{ box-shadow:inset 0 0 0 1.5px var(--series); }
+.cal-day.sel{ background:var(--series); color:#fff; font-weight:800; }
+.cal-foot{
+  margin-top:10px; padding-top:9px; border-top:1px solid var(--hair);
+  font-size:11.5px; color:var(--muted); display:flex; justify-content:space-between; align-items:center;
+}
+.cal-close{
+  border:none; background:none; font:inherit; font-size:12px; font-weight:700;
+  color:var(--series); cursor:pointer; padding:4px 6px;
+}
+.plan-result{
+  display:flex; gap:13px; align-items:center; flex-wrap:wrap;
+  border-top:1px solid var(--hair); padding-top:13px; margin-top:4px;
+}
+.pr-sig{
+  width:50px; height:50px; border-radius:15px; flex:none;
+  display:grid; place-items:center; gap:1px; color:#fff; text-align:center;
+}
+.pr-sig .i{ font-size:18px; font-weight:800; line-height:1.1; }
+.pr-sig .l{ font-size:9.5px; font-weight:800; line-height:1; }
+.pr-txt{ flex:1; min-width:210px; }
+.pr-main{ font-size:15px; font-weight:800; letter-spacing:-.015em; }
+.pr-sub{ font-size:12px; color:var(--ink2); margin-top:2px; }
+@media (max-width:520px){
+  .plan-row{ grid-template-columns:1fr; gap:4px; margin-bottom:13px; }
+}
+
 /* ---------- 필터 (모든 차트를 한 번에 스코프) ---------- */
 .filters{
-  position:sticky; top:0; z-index:20; margin:-46px 0 20px;
+  position:sticky; top:0; z-index:20; margin:0 0 20px;
   background:var(--card); border:1px solid var(--line); border-radius:16px;
   padding:13px 15px; box-shadow:0 6px 22px rgba(11,26,43,.09);
 }
@@ -106,6 +210,8 @@ body{
   background:#fff; padding:10px 6px 11px; text-align:center;
 }
 .hcard.brk{ background:#f6f8fa; }
+.hcard.sel{ border-color:var(--series); box-shadow:0 0 0 2px rgba(42,120,214,.22); }
+.hcard.sel .hh{ color:var(--series); }
 .hcard .hh{ font-size:12.5px; font-weight:700; font-variant-numeric:tabular-nums; }
 .hcard .ic{ font-size:15px; font-weight:800; margin:6px 0 5px; line-height:1; }
 .gauge{ height:52px; width:9px; margin:0 auto 7px; background:var(--hair); border-radius:5px; position:relative; }
@@ -276,6 +382,37 @@ body{
 
 <div class="wrap">
 
+  <!-- 방문 계획: 날짜·시간 슬라이더가 페이지 전체의 조회 조건을 움직인다 -->
+  <section class="plan" aria-label="방문 계획">
+    <h3>방문 계획</h3>
+    <p class="psub">날짜와 시간을 고르면 아래 모든 예보가 그 조건으로 바뀝니다 · 시간 버튼의 점 색이 그 날의 위험 등급입니다</p>
+    <div class="plan-row">
+      <div class="plab">방문 날짜</div>
+      <div>
+        <button class="plan-date-btn" id="planDateBtn" type="button"
+                aria-haspopup="dialog" aria-expanded="false">
+          <span class="cal-ic" aria-hidden="true">📅</span>
+          <span id="planDateOut"></span>
+          <span class="chev" aria-hidden="true">▾</span>
+        </button>
+      </div>
+    </div>
+    <div class="plan-row">
+      <div>
+        <div class="plab">방문 시간</div>
+        <output id="planTimeOut"></output>
+      </div>
+      <div class="hour-pills" id="planHours" role="group" aria-label="방문 시간 선택"></div>
+    </div>
+    <div class="plan-result">
+      <div class="pr-sig" id="prSig"><span class="i" id="prIcon">✓</span><span class="l" id="prLabel">안전</span></div>
+      <div class="pr-txt">
+        <div class="pr-main" id="prMain"></div>
+        <div class="pr-sub" id="prSub"></div>
+      </div>
+    </div>
+  </section>
+
   <!-- 필터: 한 줄에 모아 모든 차트를 동시에 스코프한다 -->
   <div class="filters" role="group" aria-label="조회 조건">
     <div class="frow">
@@ -369,6 +506,24 @@ body{
   </div>
 </div>
 
+<!-- 방문 날짜 캘린더 모달 -->
+<div class="cal-back" id="calBack">
+  <div class="cal" role="dialog" aria-modal="true" aria-label="방문 날짜 선택">
+    <div class="cal-head">
+      <span class="cal-title" id="calTitle"></span>
+      <div class="cal-nav">
+        <button id="calPrev" type="button" aria-label="이전 달">◀</button>
+        <button id="calNext" type="button" aria-label="다음 달">▶</button>
+      </div>
+    </div>
+    <div class="cal-grid" id="calGrid"></div>
+    <div class="cal-foot">
+      <span id="calRange"></span>
+      <button class="cal-close" id="calClose" type="button">닫기</button>
+    </div>
+  </div>
+</div>
+
 <!-- 사고 신고: 패트롤 직통 전화 + 신고 요령 -->
 <button class="sos" id="sosBtn" type="button"
         aria-label="사고 신고 — 하이원 패트롤 전화" aria-expanded="false" aria-controls="sosPanel"
@@ -409,7 +564,7 @@ body{
 <script>
 (function(){
   const M = window.MODEL, D = M.D, A = window.APP;
-  const state = { month: 1, dow: 5 };
+  const state = { month: 1, dow: 5, hour: 10 };
   const STATUS = { good:'var(--good)', warning:'var(--warning)', critical:'var(--critical)' };
   const col = lv => STATUS[lv.token];
 
@@ -417,11 +572,132 @@ body{
   document.getElementById('sectAcc').textContent =
     `${D.meta.sources[0].period}년 실측 ${M.num(M.summary.totalAccidents)}건`;
 
+  // ---- 방문 계획: 오늘부터 시즌 종료(3/31)까지의 날짜 목록 ----
+  const PLAN = (function(){
+    const today = new Date(); today.setHours(0, 0, 0, 0);
+    const y = today.getFullYear(), m = today.getMonth() + 1;
+    let start, end;
+    if (m === 12)     { start = new Date(today); end = new Date(y + 1, 2, 31); }
+    else if (m <= 3)  { start = new Date(today); end = new Date(y, 2, 31); }
+    else              { start = new Date(y, 11, 1); end = new Date(y + 1, 2, 31); } // 시즌 오프 → 다음 시즌
+    const dates = [];
+    for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) dates.push(new Date(d));
+    return { dates };
+  })();
+
+  const $id = id => document.getElementById(id);
+  const dowOf = d => (d.getDay() + 6) % 7;
+  const dateLabel = d => `${d.getMonth() + 1}월 ${d.getDate()}일 (${M.DOW_KO[dowOf(d)]})`;
+  const sameDay = (a, b) => a && b && a.getFullYear() === b.getFullYear() &&
+    a.getMonth() === b.getMonth() && a.getDate() === b.getDate();
+  let selDate = null;
+
+  function setPlanDate(d){
+    selDate = d;
+    state.month = d.getMonth() + 1;
+    state.dow = dowOf(d);
+    $id('planDateOut').textContent = dateLabel(d);
+  }
+
+  /** 칩으로 월·요일을 직접 고른 경우: 그 조건과 일치하는 가장 가까운 날짜를 선택한다 */
+  function alignPlanFromChips(){
+    const hit = PLAN.dates.find(d => d.getMonth() + 1 === state.month && dowOf(d) === state.dow);
+    if (hit) setPlanDate(hit);
+    else {
+      // 이번 시즌에 이미 지나간 조합(예: 1월에 12월 선택) — 일반 라벨로 표시
+      selDate = null;
+      $id('planDateOut').textContent = `${state.month}월 ${M.DOW_KO[state.dow]}요일`;
+    }
+  }
+
+  // ---- 캘린더 모달 ----
+  const CAL = (function(){
+    const first = PLAN.dates[0], last = PLAN.dates[PLAN.dates.length - 1];
+    const months = [];
+    for (let y = first.getFullYear(), m = first.getMonth(); ; ){
+      months.push({ y, m });
+      if (y === last.getFullYear() && m === last.getMonth()) break;
+      m++; if (m > 11) { m = 0; y++; }
+    }
+    return { first, last, months, vi: 0 };
+  })();
+  const calBack = $id('calBack'), calGrid = $id('calGrid');
+  const today0 = new Date(); today0.setHours(0, 0, 0, 0);
+  $id('calRange').textContent =
+    `${dateLabel(CAL.first)} ~ ${dateLabel(CAL.last)} 사이에서 고를 수 있어요`;
+
+  function renderCal(){
+    const { y, m } = CAL.months[CAL.vi];
+    $id('calTitle').textContent = `${y}년 ${m + 1}월`;
+    $id('calPrev').disabled = CAL.vi === 0;
+    $id('calNext').disabled = CAL.vi === CAL.months.length - 1;
+    calGrid.innerHTML = '';
+    M.DOW_KO.forEach((t, i) => {
+      const e = document.createElement('div');
+      e.className = 'cal-dow' + (i === 6 ? ' sun' : '');
+      e.textContent = t;
+      calGrid.appendChild(e);
+    });
+    const firstDay = new Date(y, m, 1);
+    for (let i = 0; i < dowOf(firstDay); i++) calGrid.appendChild(document.createElement('div'));
+    const lastDate = new Date(y, m + 1, 0).getDate();
+    for (let day = 1; day <= lastDate; day++){
+      const d = new Date(y, m, day);
+      const b = document.createElement('button');
+      b.type = 'button'; b.className = 'cal-day'; b.textContent = day;
+      const enabled = d >= CAL.first && d <= CAL.last;
+      b.disabled = !enabled;
+      if (sameDay(d, today0)) b.classList.add('today');
+      if (sameDay(d, selDate)) b.classList.add('sel');
+      if (enabled){
+        b.setAttribute('aria-label', dateLabel(d));
+        b.addEventListener('click', () => { setPlanDate(d); closeCal(); render(); });
+      }
+      calGrid.appendChild(b);
+    }
+  }
+  function openCal(){
+    const base = selDate || CAL.first;
+    CAL.vi = Math.max(0, CAL.months.findIndex(x => x.y === base.getFullYear() && x.m === base.getMonth()));
+    renderCal();
+    calBack.classList.add('open');
+    $id('planDateBtn').setAttribute('aria-expanded', 'true');
+  }
+  function closeCal(){
+    calBack.classList.remove('open');
+    $id('planDateBtn').setAttribute('aria-expanded', 'false');
+  }
+  $id('planDateBtn').addEventListener('click', openCal);
+  $id('calClose').addEventListener('click', closeCal);
+  $id('calPrev').addEventListener('click', () => { CAL.vi--; renderCal(); });
+  $id('calNext').addEventListener('click', () => { CAL.vi++; renderCal(); });
+  calBack.addEventListener('click', e => { if (e.target === calBack) closeCal(); });
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && calBack.classList.contains('open')) closeCal();
+  });
+
+  // ---- 시간 버튼 줄: 각 버튼의 점 색이 그 날의 위험 등급을 미리 보여준다 ----
+  const hoursHost = $id('planHours');
+  M.HOURS.forEach(h => {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'hpill' + (h === 17 ? ' brk' : '');
+    b.dataset.hour = h;
+    b.innerHTML = `<span>${M.pad(h)}시</span><span class="dot" aria-hidden="true"></span>`;
+    b.setAttribute('aria-pressed', 'false');
+    b.addEventListener('click', () => { state.hour = h; render(); });
+    hoursHost.appendChild(b);
+  });
+
+  // 초깃값: 오늘(또는 시즌 첫날) + 현재 시각(운영시간으로 클램프)
+  setPlanDate(PLAN.dates[0]);
+  state.hour = Math.min(22, Math.max(9, new Date().getHours()));
+
   // ---- 필터 칩 ----
   A.chips(document.getElementById('fMonth'), M.MONTHS.map(m => ({ v:m, t:m+'월' })),
-    () => state.month, v => { state.month = v; render(); });
+    () => state.month, v => { state.month = v; alignPlanFromChips(); render(); });
   A.chips(document.getElementById('fDow'), M.DOW_KO.map((t,i) => ({ v:i, t })),
-    () => state.dow, v => { state.dow = v; render(); }, 'wk');
+    () => state.dow, v => { state.dow = v; alignPlanFromChips(); render(); }, 'wk');
 
   function render(){
     A.syncChips();
@@ -429,6 +705,35 @@ body{
     const prof = M.dayProfile(m, w);
     const rec  = M.recommend(m, w);
     const when = `${m}월 ${M.DOW_KO[w]}요일`;
+
+    // ---- 방문 계획 결과: 선택한 날짜·시간의 위험도 ----
+    const sel = prof.find(p => p.hour === state.hour);
+    document.getElementById('planTimeOut').textContent = `${M.pad(state.hour)}:00 – ${M.pad(state.hour + 1)}:00`;
+    document.querySelectorAll('#planHours .hpill').forEach(b => {
+      const hp = prof.find(x => x.hour === +b.dataset.hour);
+      b.setAttribute('aria-pressed', String(hp.hour === state.hour));
+      b.querySelector('.dot').style.background =
+        hp.session.key === 'break' ? 'var(--muted)' : col(hp.level);
+      b.title = hp.session.key === 'break'
+        ? '주간→야간 전환 정비'
+        : `${hp.level.label} · 위험지수 ${hp.score}`;
+    });
+    const prSig = document.getElementById('prSig');
+    if (sel.session.key === 'break') {
+      prSig.style.background = 'var(--muted)';
+      document.getElementById('prIcon').textContent = '—';
+      document.getElementById('prLabel').textContent = '정비';
+      document.getElementById('prMain').textContent = '17시는 주간→야간 전환 정비 시간대입니다';
+      document.getElementById('prSub').textContent = '야간 개장(18시) 이후 또는 주간 시간대를 선택해 주세요';
+    } else {
+      prSig.style.background = col(sel.level);
+      document.getElementById('prIcon').textContent = sel.level.icon;
+      document.getElementById('prLabel').textContent = sel.level.label;
+      document.getElementById('prMain').textContent =
+        `이 시간은 ${sel.level.label} · 위험지수 ${sel.score}점`;
+      document.getElementById('prSub').textContent =
+        `${sel.level.desc} · 2024년 이 시간대 사고 ${sel.accidents}건 · 혼잡 ${A.crowdWord(M.crowdIndex(m, w))}`;
+    }
 
     // ---- 히어로 : 그 날의 최고 위험 시간대를 대표값으로 ----
     const peak = prof.reduce((a,b) => b.score > a.score ? b : a);
@@ -459,7 +764,7 @@ body{
     prof.forEach(p => {
       const brk = p.session.key === 'break';
       const c = document.createElement('div');
-      c.className = 'hcard' + (brk ? ' brk' : '');
+      c.className = 'hcard' + (brk ? ' brk' : '') + (p.hour === state.hour ? ' sel' : '');
       c.innerHTML =
         `<div class="hh">${M.pad(p.hour)}시</div>
          <div class="ic" style="color:${brk?'var(--muted)':col(p.level)}">${brk?'—':p.level.icon}</div>
@@ -478,13 +783,14 @@ body{
       subtitle: `점선 없이 막대 위 기호로 등급을 함께 표시합니다. ✓ 안전 · ! 주의 · ✕ 위험 (${M.T1}점·${M.T2}점 경계)`,
       data: prof.map(p => ({
         label: M.pad(p.hour), value: p.score, p,
-        emphasis: p.hour === peak.hour, dim: p.session.key === 'break',
+        emphasis: p.hour === peak.hour || p.hour === state.hour,
+        dim: p.session.key === 'break',
       })),
       height: 230, yMax: 100, yTicks: 4,
       color: d => col(d.p.level),
       glyph: d => d.p.session.key === 'break' ? null : d.p.level.icon,
       glyphColor: d => col(d.p.level),
-      directLabel: d => d.p.hour === peak.hour,
+      directLabel: d => d.p.hour === peak.hour || d.p.hour === state.hour,
       tooltip: d => [
         [`${M.hrange(d.p.hour)} · ${d.p.level.label}`, ''],
         ['위험지수', d.value],
