@@ -194,6 +194,57 @@ body{
   .floatbar .fscore{ display:none; }
 }
 
+/* ---------- 사고 신고 버튼 + 패널 ----------
+   플로팅 바가 보일 때는 .lifted 로 그 위에 얹힌다 */
+.sos{
+  position:fixed; right:16px; bottom:16px; z-index:41;
+  width:52px; height:52px; border-radius:50%; border:none; cursor:pointer;
+  background:var(--critical); color:#fff;
+  font-size:24px; font-weight:900; line-height:1; font-family:inherit;
+  display:grid; place-items:center;
+  box-shadow:0 6px 18px rgba(208,59,59,.45), 0 0 0 3px rgba(255,255,255,.85);
+  transition:bottom .28s ease, transform .15s ease;
+}
+.sos:hover{ transform:scale(1.07); }
+.sos:focus-visible{ outline:3px solid var(--ink); outline-offset:2px; }
+.sos.lifted{ bottom:96px; }
+.sos-panel{
+  position:fixed; right:16px; bottom:78px; z-index:42;
+  width:min(330px, calc(100vw - 32px));
+  background:#fff; border:1px solid var(--line); border-radius:16px;
+  box-shadow:0 14px 40px rgba(11,26,43,.28);
+  padding:16px 16px 14px; display:none;
+  transition:bottom .28s ease;
+}
+.sos-panel.open{ display:block; }
+.sos-panel.lifted{ bottom:158px; }
+.sos-head{
+  display:flex; align-items:center; justify-content:space-between;
+  font-size:14px; font-weight:800; letter-spacing:-.01em; margin-bottom:11px;
+}
+.sos-close{
+  border:none; background:none; cursor:pointer; padding:2px 6px;
+  font-size:16px; font-weight:700; color:var(--muted); line-height:1;
+}
+.sos-close:hover{ color:var(--ink); }
+.sos-call{
+  display:flex; align-items:center; justify-content:center; gap:9px;
+  background:var(--critical); color:#fff; text-decoration:none;
+  font-size:20px; font-weight:800; letter-spacing:.01em;
+  font-variant-numeric:tabular-nums;
+  border-radius:12px; padding:13px 10px;
+}
+.sos-call:active{ opacity:.85; }
+.sos-callsub{ font-size:11.5px; color:var(--muted); text-align:center; margin:7px 0 12px; }
+.sos-tips{ margin:0; padding:0; list-style:none; border-top:1px solid var(--hair); }
+.sos-tips li{
+  display:flex; gap:8px; padding:9px 0; font-size:12.5px; line-height:1.55;
+  color:var(--ink2); border-bottom:1px solid var(--hair);
+}
+.sos-tips li:last-child{ border-bottom:0; }
+.sos-tips .tip-ic{ flex:none; font-size:13px; }
+.sos-tips b{ color:var(--ink); }
+
 /* ---------- 출처 ---------- */
 .src{ font-size:12px; color:var(--muted); }
 .src h3{ font-size:13px; color:var(--ink); margin:0 0 8px; }
@@ -316,6 +367,27 @@ body{
   <div class="foot">
     <span>SDU COSS 공공데이터 활용 바이브코딩 · 팀 강원랜드가고싶조</span>
   </div>
+</div>
+
+<!-- 사고 신고: 패트롤 직통 전화 + 신고 요령 -->
+<button class="sos" id="sosBtn" type="button"
+        aria-label="사고 신고 — 하이원 패트롤 전화" aria-expanded="false" aria-controls="sosPanel"
+        title="사고 신고 · 하이원 패트롤">!</button>
+<div class="sos-panel" id="sosPanel" role="dialog" aria-label="사고 신고 안내" hidden>
+  <div class="sos-head">
+    <span>⛑ 사고 신고 · 하이원 패트롤</span>
+    <button class="sos-close" id="sosClose" type="button" aria-label="닫기">✕</button>
+  </div>
+  <a class="sos-call" href="tel:0335907119">📞 033-590-7119</a>
+  <p class="sos-callsub">휴대폰에서 누르면 바로 전화가 걸립니다</p>
+  <ul class="sos-tips">
+    <li><span class="tip-ic" aria-hidden="true">📍</span>
+        <span><b>가까운 리프트 기둥의 번호를 확인해주세요!</b> 위치를 가장 빠르고 정확하게 알릴 수 있습니다.</span></li>
+    <li><span class="tip-ic" aria-hidden="true">🗣</span>
+        <span>슬로프 이름과 부상자 상태(인원·의식 여부)를 함께 알려주세요.</span></li>
+    <li><span class="tip-ic" aria-hidden="true">⛷</span>
+        <span>부상자를 함부로 옮기지 말고, 슬로프 <b>위쪽에 스키·보드를 X자로 세워</b> 뒤에서 오는 사람에게 알려주세요.</span></li>
+  </ul>
 </div>
 
 <!-- 플로팅 예보 바: 히어로가 화면 밖일 때만 표시, 누르면 예보로 복귀 -->
@@ -538,6 +610,25 @@ body{
     window.__fbUpdate = update;   // 데모·테스트용: 특정 시각을 주입해 상태 확인
   })();
 
+  // ---- 사고 신고 버튼: 패널 토글 (바깥 클릭·Esc 로 닫힘) ----
+  (function(){
+    const btn = document.getElementById('sosBtn');
+    const panel = document.getElementById('sosPanel');
+    const toggle = open => {
+      panel.hidden = !open;
+      panel.classList.toggle('open', open);
+      btn.setAttribute('aria-expanded', String(open));
+    };
+    btn.addEventListener('click', e => { e.stopPropagation(); toggle(panel.hidden); });
+    document.getElementById('sosClose').addEventListener('click', () => { toggle(false); btn.focus(); });
+    document.addEventListener('click', e => {
+      if (!panel.hidden && !panel.contains(e.target)) toggle(false);
+    });
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape' && !panel.hidden) { toggle(false); btn.focus(); }
+    });
+  })();
+
   // ---- 플로팅 바 표시 제어: 히어로가 화면 밖일 때만 ----
   (function(){
     const bar = document.getElementById('floatbar');
@@ -549,6 +640,9 @@ body{
       bar.classList.toggle('on', show);
       bar.setAttribute('aria-hidden', String(!show));
       bar.tabIndex = show ? 0 : -1;
+      // 신고 버튼·패널을 플로팅 바 위로 올린다
+      document.getElementById('sosBtn').classList.toggle('lifted', show);
+      document.getElementById('sosPanel').classList.toggle('lifted', show);
     };
     if ('IntersectionObserver' in window) {
       new IntersectionObserver(
